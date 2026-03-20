@@ -24,11 +24,9 @@ ENV NODE_ENV=production
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
-
-# ✅ Match the exact generator output path
 COPY --from=build /app/src/generated/prisma ./src/generated/prisma
-
+COPY --from=build /app/prisma ./prisma
 COPY package.json ./
 
 EXPOSE 3000
-CMD ["node", "dist/server.js"]
+CMD ["sh", "-c", "node_modules/.bin/prisma migrate deploy && node dist/server.js"]
