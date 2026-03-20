@@ -12,9 +12,9 @@ RUN npm ci
 COPY tsconfig.json ./
 COPY prisma ./prisma/
 COPY prisma.config.ts ./
+COPY src ./src/
 ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
 RUN npx prisma generate
-COPY src ./src/
 RUN npm run build
 
 # ── Stage 3: Production image ──
