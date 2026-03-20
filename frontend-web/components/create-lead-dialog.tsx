@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
 import { useLeadStore } from "@/lib/store";
+import { useLeads } from "@/hooks/use-leads";
+import { createLeadSchema, type CreateLeadFormSchema } from "@/lib/schemas";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,17 +24,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const createLeadSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Invalid email address"),
-  status: z.enum(["New", "Engaged", "ProposalSent", "ClosedWon", "ClosedLost"]),
-});
-
-type CreateLeadForm = z.infer<typeof createLeadSchema>;
-
 export function CreateLeadDialog() {
-  const { isCreateDialogOpen, closeCreateDialog, addLead } = useLeadStore();
-  const [isLoading, setIsLoading] = useState(false);
+  const { isCreateDialogOpen, closeCreateDialog } = useLeadStore();
+  const { createLead, isCreating } = useLeads();
 
   const {
     register,
@@ -43,36 +34,14 @@ export function CreateLeadDialog() {
     setValue,
     reset,
     formState: { errors },
-  } = useForm<CreateLeadForm>({
+  } = useForm<CreateLeadFormSchema>({
     resolver: zodResolver(createLeadSchema),
     defaultValues: { status: "New" },
   });
 
-  const onSubmit = async (data: CreateLeadForm) => {
-    setIsLoading(true);
-    try {
-      const res = await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      const result = await res.json();
-
-      if (!res.ok) {
-        toast.error(result.message || "Failed to create lead");
-        return;
-      }
-
-      addLead(result.data);
-      toast.success("Lead created successfully!");
-      reset();
-      closeCreateDialog();
-    } catch {
-      toast.error("Network error. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+  const onSubmit = async (data: CreateLeadFormSchema) => {
+    const { success } = await createLead(data);
+    if (success) reset();
   };
 
   return (
@@ -119,7 +88,7 @@ export function CreateLeadDialog() {
             <Select
               defaultValue="New"
               onValueChange={(value) =>
-                setValue("status", value as CreateLeadForm["status"])
+                setValue("status", value as CreateLeadFormSchema["status"])
               }
             >
               <SelectTrigger id="lead-status">
@@ -145,12 +114,12 @@ export function CreateLeadDialog() {
               type="button"
               variant="outline"
               onClick={closeCreateDialog}
-              disabled={isLoading}
+              disabled={isCreating}
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? "Creating…" : "Create Lead"}
+            <Button type="submit" disabled={isCreating}>
+              {isCreating ? "Creating…" : "Create Lead"}
             </Button>
           </div>
         </form>

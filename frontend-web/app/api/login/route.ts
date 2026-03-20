@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { sessionOptions } from "@/lib/session";
 import { authApi } from "@/lib/api";
 import type { SessionData } from "@/lib/types";
+import { handleApiError } from "@/lib/route-utils";
 
 export async function POST(request: Request) {
   try {
@@ -25,30 +26,8 @@ export async function POST(request: Request) {
       message: "Login successful",
       data: { user: response.data!.user },
     });
-  } catch (error: unknown) {
-    if (
-      error &&
-      typeof error === "object" &&
-      "response" in error &&
-      error.response &&
-      typeof error.response === "object" &&
-      "data" in error.response
-    ) {
-      const axiosError = error as {
-        response: { status: number; data: { message?: string } };
-      };
-      return NextResponse.json(
-        {
-          status: "error",
-          message: axiosError.response.data.message || "Login failed",
-        },
-        { status: axiosError.response.status },
-      );
-    }
-    return NextResponse.json(
-      { status: "error", message: "Something went wrong" },
-      { status: 500 },
-    );
+  } catch (error) {
+    return handleApiError(error, "Login failed");
   }
 }
 

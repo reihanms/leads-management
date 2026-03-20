@@ -1,22 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 
 export function Navbar() {
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    try {
-      await fetch("/api/logout", { method: "POST" });
-      toast.success("Logged out");
-      router.push("/login");
-    } catch {
-      toast.error("Failed to log out");
-    }
-  };
+  const { logout, isLoggingOut } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -28,9 +17,14 @@ export function Navbar() {
           <h1 className="text-lg font-semibold">Lead Manager</h1>
         </div>
 
-        <Button variant="ghost" size="sm" onClick={handleLogout}>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={logout}
+          disabled={isLoggingOut}
+        >
           <LogOut className="mr-2 h-4 w-4" />
-          Logout
+          {isLoggingOut ? "Logging out..." : "Logout"}
         </Button>
       </div>
     </header>
