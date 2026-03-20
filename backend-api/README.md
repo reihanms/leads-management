@@ -9,7 +9,7 @@ A secure Express.js REST API for managing sales leads, built with TypeScript, Pr
 | **Express.js 5**        | Web framework                  |
 | **TypeScript**          | Type-safe development          |
 | **Prisma 7**            | ORM with driver adapter (`pg`) |
-| **PostgreSQL (Supabase)** | Database                     |
+| **PostgreSQL (Railway)** | Database                     |
 | **JWT + bcrypt**        | Custom authentication          |
 | **Zod**                 | Request validation             |
 | **Helmet + CORS**       | Security middleware            |
@@ -43,7 +43,7 @@ backend-api/
 - Node.js 20+
 - npm
 - Docker (optional)
-- A PostgreSQL database (Supabase or local)
+- A PostgreSQL database (e.g. Railway or local)
 
 ### 1. Install Dependencies
 
@@ -87,6 +87,15 @@ The server starts at `http://localhost:3000`.
 ```bash
 docker compose up --build
 ```
+
+### 6. Production Deployment (Railway)
+
+The backend is configured to be deployed easily on **Railway**.
+Live API URL: [https://leads-management-production.up.railway.app](https://leads-management-production.up.railway.app)
+
+1. Provision a PostgreSQL database on Railway.
+2. Link the repository to Railway.
+3. Railway will build the Docker container and automatically run the `start` script defined in `package.json`, which executes `npx prisma migrate deploy` followed by the server startup.
 
 ## API Endpoints
 

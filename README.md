@@ -7,7 +7,7 @@ A full-stack, secure application for managing sales leads. Features a containeri
 The project consists of two main services designed to be run together:
 
 1. **Backend API (`/backend-api`)**: Express.js REST API
-   - Prisma ORM (connected to Supabase PostgreSQL)
+   - Prisma ORM (connected to Railway PostgreSQL)
    - Custom JWT Authentication & bcrypt
    - Zod Validation & Global Error Handling
    - Runs on port `3000`
@@ -17,6 +17,16 @@ The project consists of two main services designed to be run together:
    - Secure Proxy API Routes (`iron-session` encrypted cookies)
    - Zustand State Management
    - Runs on port `3001`
+
+---
+
+## 🌍 Live Deployment
+
+The application is fully deployed and accessible in production:
+
+- **Frontend (Vercel)**: [https://leads-management-test.vercel.app](https://leads-management-test.vercel.app)
+- **Backend API (Railway)**: [https://leads-management-production.up.railway.app](https://leads-management-production.up.railway.app)
+- **Database (Railway)**: The PostgreSQL database is provisioned and hosted directly on Railway.
 
 ---
 
@@ -35,7 +45,7 @@ The easiest way to run the entire stack is with Docker Compose. This single comm
 
 ```bash
 cp backend-api/.env.example backend-api/.env
-# Make sure to fill in your DATABASE_URL (e.g. Supabase Postgres) and JWT_SECRET
+# Make sure to fill in your DATABASE_URL (e.g. Railway Postgres) and JWT_SECRET
 ```
 
 **Frontend:**

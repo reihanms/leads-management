@@ -4,17 +4,17 @@ A secure Next.js dashboard for managing sales leads, built with TypeScript, Shad
 
 ## Tech Stack
 
-| Technology        | Purpose                                |
-| ----------------- | -------------------------------------- |
-| **Next.js 16**    | React framework (App Router)           |
-| **TypeScript**    | Type-safe development                  |
-| **Tailwind CSS 4** | Utility-first styling                 |
-| **Shadcn UI**     | Component library (radix-nova)         |
-| **iron-session**  | Encrypted JWT storage in HTTP-only cookie |
-| **Zustand**       | Lightweight state management           |
-| **React Hook Form + Zod** | Form handling with validation  |
-| **Axios**         | HTTP client for Express backend        |
-| **Docker**        | Containerized deployment               |
+| Technology                | Purpose                                   |
+| ------------------------- | ----------------------------------------- |
+| **Next.js 16**            | React framework (App Router)              |
+| **TypeScript**            | Type-safe development                     |
+| **Tailwind CSS 4**        | Utility-first styling                     |
+| **Shadcn UI**             | Component library (radix-nova)            |
+| **iron-session**          | Encrypted JWT storage in HTTP-only cookie |
+| **Zustand**               | Lightweight state management              |
+| **React Hook Form + Zod** | Form handling with validation             |
+| **Axios**                 | HTTP client for Express backend           |
+| **Docker**                | Containerized deployment                  |
 
 ## Project Structure
 
@@ -69,10 +69,10 @@ npm install
 cp .env.example .env
 ```
 
-| Variable                 | Description                              |
-| ------------------------ | ---------------------------------------- |
-| `NEXT_PUBLIC_API_URL`    | Express backend URL (e.g. `http://localhost:3000/api`) |
-| `IRON_SESSION_PASSWORD`  | 32+ character secret for cookie encryption |
+| Variable                | Description                                            |
+| ----------------------- | ------------------------------------------------------ |
+| `NEXT_PUBLIC_API_URL`   | Express backend URL (e.g. `http://localhost:3000/api`) |
+| `IRON_SESSION_PASSWORD` | 32+ character secret for cookie encryption             |
 
 ### 3. Start Development Server
 
@@ -89,6 +89,14 @@ docker compose up --build
 ```
 
 Runs on `http://localhost:3001`.
+
+### 5. Production Deployment (Vercel)
+
+The frontend is specifically optimized to be deployed on **Vercel**.
+Live URL: [https://leads-management-test.vercel.app](https://leads-management-test.vercel.app)
+
+1. Import the `frontend-web` folder into a new Vercel project.
+2. In the Vercel project settings, set `NEXT_PUBLIC_API_URL` to your production backend URL and `IRON_SESSION_PASSWORD` to a secure 32+ character string.
 
 ## Auth Flow
 
@@ -107,3 +115,4 @@ Runs on `http://localhost:3001`.
 | `ProposalSent` | Proposal has been sent   |
 | `ClosedWon`    | Deal successfully closed |
 | `ClosedLost`   | Deal lost                |
+
