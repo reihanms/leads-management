@@ -12,6 +12,8 @@ RUN npm ci
 COPY tsconfig.json ./
 COPY prisma ./prisma/
 COPY prisma.config.ts ./
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
+RUN npx prisma generate
 COPY src ./src/
 RUN npm run build
 
@@ -20,10 +22,12 @@ FROM node:20-alpine AS production
 WORKDIR /app
 ENV NODE_ENV=production
 
-# Copy only what's needed to run
 COPY --from=deps /app/node_modules ./node_modules
+
+# ✅ Overwrite with the generated Prisma client from build stage
+COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
+
 COPY --from=build /app/dist ./dist
-COPY --from=build /app/src/generated ./src/generated
 COPY package.json ./
 
 EXPOSE 3000
