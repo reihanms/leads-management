@@ -23,11 +23,11 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 COPY --from=deps /app/node_modules ./node_modules
-
-# ✅ Overwrite with the generated Prisma client from build stage
-COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
-
 COPY --from=build /app/dist ./dist
+
+# ✅ Match the exact generator output path
+COPY --from=build /app/src/generated/prisma ./src/generated/prisma
+
 COPY package.json ./
 
 EXPOSE 3000
